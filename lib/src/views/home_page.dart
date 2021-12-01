@@ -1,10 +1,10 @@
+// ignore_for_file: implementation_imports
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:home/src/widgets/carousel_slider.dart';
-import 'package:home/src/models/home_menu_args.dart';
 import 'package:utils/src/models/models.dart';
 import 'package:utils/src/blocs/configuration/configuration_bloc.dart';
-import 'package:utils/src/repository/configuration_repository.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -56,10 +56,10 @@ class _HomePageState extends State<HomePage> {
                           ),
                           onPressed: () => Navigator.of(context).pushNamed(
                             homeMenu[i]['route'],
-                            arguments: HomeMenuArgs(
+                            arguments: [
                               homeMenu[i]['name'] + "'s List",
                               homeMenu[i]['tagId'],
-                            ),
+                            ],
                           ),
                         )
                   ],
