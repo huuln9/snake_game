@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:home/src/widgets/carousel_slider.dart';
+import 'package:home/widgets/carousel_slider.dart';
 import 'package:utils/src/models/models.dart';
 import 'package:utils/src/blocs/configuration/configuration_bloc.dart';
 
