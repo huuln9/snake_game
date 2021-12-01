@@ -45,7 +45,11 @@ class _HomePageState extends State<HomePage> {
                           icon: Column(
                             children: [
                               SizedBox(
-                                child: Image.asset("assets/images/school.png"),
+                                child: Image.asset(
+                                  "assets/images/school.png",
+                                  package: 'home',
+                                ),
+                                // Image.asset("assets/images/school.png"),
                                 width: 60,
                                 height: 60,
                               ),

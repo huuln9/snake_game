@@ -21,7 +21,7 @@ final List<Widget> listImageSlider = listImage
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     fit: BoxFit.fill,
-                    image: AssetImage(item),
+                    image: AssetImage(item, package: 'home'),
                   ),
                 ),
               ),
