@@ -15,7 +15,8 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   var gameStarted = false;
-  var snake = [75, 100, 125, 150, 175];
+  var snake = [78, 103, 128, 153, 178];
+  var direction = 'down';
 
   static var randomNum = Random();
   int food = randomNum.nextInt(900);
@@ -24,18 +25,16 @@ class _AppState extends State<App> {
   }
 
   void startGame() {
-    // snake = [78, 103, 128, 153, 178];
-    const duration = Duration(milliseconds: 300);
+    const duration = Duration(milliseconds: 200);
     Timer.periodic(duration, (Timer timer) {
       updateSnake();
-      // if (gameOver) {
-      //   timer.cancel();
-      //   _showGameOverScreen();
-      // }
+      if (gameOver()) {
+        timer.cancel();
+        _showGameOverScreen();
+      }
     });
   }
 
-  var direction = 'down';
   void updateSnake() {
     setState(() {
       switch (direction) {
@@ -77,6 +76,44 @@ class _AppState extends State<App> {
         snake.removeAt(0);
       }
     });
+  }
+
+  void resetGame() {
+    Navigator.pop(context);
+    snake = [78, 103, 128, 153, 178];
+    direction = 'down';
+    startGame();
+  }
+
+  bool gameOver() {
+    for (var i = 0; i < snake.length - 1; i++) {
+      if (snake.last == snake[i]) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  void _showGameOverScreen() {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Center(child: Text('G A M E  O V E R')),
+          content: const Text("You are lose!"),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => resetGame(),
+              child: const Text(
+                'PLAY AGAIN',
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
