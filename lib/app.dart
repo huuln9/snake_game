@@ -14,7 +14,8 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  var snake = [78, 103, 128, 153, 178];
+  var gameStarted = false;
+  var snake = [75, 100, 125, 150, 175];
 
   static var randomNum = Random();
   int food = randomNum.nextInt(900);
@@ -23,7 +24,7 @@ class _AppState extends State<App> {
   }
 
   void startGame() {
-    snake = [78, 103, 128, 153, 178];
+    // snake = [78, 103, 128, 153, 178];
     const duration = Duration(milliseconds: 300);
     Timer.periodic(duration, (Timer timer) {
       updateSnake();
@@ -35,7 +36,48 @@ class _AppState extends State<App> {
   }
 
   var direction = 'down';
-  void updateSnake() {}
+  void updateSnake() {
+    setState(() {
+      switch (direction) {
+        case 'down':
+          if (snake.last >= 875) {
+            snake.add(snake.last + 25 - 900);
+          } else {
+            snake.add(snake.last + 25);
+          }
+          break;
+        case 'up':
+          if (snake.last <= 24) {
+            snake.add(snake.last - 25 + 900);
+          } else {
+            snake.add(snake.last - 25);
+          }
+          break;
+        case 'left':
+          if (snake.last % 25 == 0) {
+            snake.add(snake.last - 1 + 25);
+          } else {
+            snake.add(snake.last - 1);
+          }
+          break;
+        case 'right':
+          if ((snake.last + 1) % 25 == 0) {
+            snake.add(snake.last + 1 - 25);
+          } else {
+            snake.add(snake.last + 1);
+          }
+          break;
+        default:
+          break;
+      }
+
+      if (snake.last == food) {
+        generateNewFood();
+      } else {
+        snake.removeAt(0);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,77 +97,103 @@ class _AppState extends State<App> {
                   padding: const EdgeInsets.all(1.0),
                   child: Container(
                     color: snake.contains(index)
-                        ? Colors.green
+                        ? Colors.red
                         : index == food
-                            ? Colors.red
+                            ? Colors.green
                             : Colors.grey[900],
+                    // child: Text(
+                    //   index.toString(),
+                    //   style: TextStyle(color: Colors.white, fontSize: 6),
+                    // ),
                   ),
                 );
               },
             ),
           ),
           Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 100,
-                  height: 100,
-                  child: IconButton(
-                    onPressed: () => {},
-                    icon: const Icon(
-                      Icons.arrow_back_outlined,
-                      size: 50,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                Column(
-                  children: [
-                    Expanded(
-                      child: SizedBox(
+            child: gameStarted
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
                         width: 100,
                         height: 100,
                         child: IconButton(
-                          onPressed: () => {},
+                          onPressed: () => setState(() {
+                            direction = 'left';
+                          }),
                           icon: const Icon(
-                            Icons.arrow_upward_outlined,
+                            Icons.arrow_back_outlined,
                             size: 50,
                             color: Colors.white,
                           ),
                         ),
                       ),
-                    ),
-                    Expanded(
-                      child: SizedBox(
+                      Column(
+                        children: [
+                          Expanded(
+                            child: SizedBox(
+                              width: 100,
+                              height: 100,
+                              child: IconButton(
+                                onPressed: () => setState(() {
+                                  direction = 'up';
+                                }),
+                                icon: const Icon(
+                                  Icons.arrow_upward_outlined,
+                                  size: 50,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: SizedBox(
+                              width: 100,
+                              height: 100,
+                              child: IconButton(
+                                onPressed: () => setState(() {
+                                  direction = 'down';
+                                }),
+                                icon: const Icon(
+                                  Icons.arrow_downward_outlined,
+                                  size: 50,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
                         width: 100,
                         height: 100,
                         child: IconButton(
-                          onPressed: () => {},
+                          onPressed: () => setState(() {
+                            direction = 'right';
+                          }),
                           icon: const Icon(
-                            Icons.arrow_downward_outlined,
+                            Icons.arrow_forward_outlined,
                             size: 50,
                             color: Colors.white,
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  width: 100,
-                  height: 100,
-                  child: IconButton(
-                    onPressed: () => {},
+                    ],
+                  )
+                : IconButton(
+                    onPressed: () => {
+                      startGame(),
+                      setState(() {
+                        gameStarted = true;
+                      })
+                    },
                     icon: const Icon(
-                      Icons.arrow_forward_outlined,
+                      Icons.play_arrow,
                       size: 50,
                       color: Colors.white,
                     ),
                   ),
-                ),
-              ],
-            ),
           )
         ],
       ),
